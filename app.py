@@ -1,52 +1,36 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep  1 20:34:11 2022
+Created on Fri Sep  2 20:16:24 2022
 
-@author: edsaac
+@author: admin
 
-https://discuss.streamlit.io/t/visualization-of-stl-files/27050/3
-https://github.com/edsaac/streamlit-PyVista-viewer
-https://docs.pyvista.org/user-guide/jupyter/pythreejs.html
+https://discuss.streamlit.io/t/include-an-existing-html-file-in-streamlit-app/5655/3
 """
 
 import streamlit as st
-import pyvista as pv
-import io
-import tempfile
+import streamlit.components.v1 as components 
 
-## Using pythreejs as pyvista backend
-pv.set_jupyter_backend('pythreejs')
+# >>> import plotly.express as px
+# >>> fig = px.box(range(10))
+# >>> fig.write_html('test.html')
 
-## Upload a pyvista file
-uploadedFile = st.file_uploader("Upload a STL:",["stl"],False)
+st.header("test html import")
 
-## Streamlit layout
-st.sidebar.title("STL viewer")
+def uploader_cb():
+    print("Dummy callback for file uploader")
 
-if uploadedFile:
+# define: file variables with streamlit
+htmlFile = st.file_uploader("html file for display", type = 'html', on_change = uploader_cb())
+if htmlFile is None:
+    st.stop()  
     
-    ## Color panel
-    col1,col2 = st.sidebar.columns(2)
-    color_stl = col1.color_picker("Element","#0BD88D")
-    color_bkg = col2.color_picker("Background","#FFFFFF")
+# source_code = htmlFile.getvalue()
+# st.write(source_code)
 
-    ## Initialize pyvista reader and plotter
-    plotter = pv.Plotter(border=False, window_size=[500,400]) 
-    plotter.background_color = color_bkg
-
-    ## Create a tempfile to keep the uploaded file as pyvista's API 
-    ## only supports file paths but not buffers
-    with tempfile.NamedTemporaryFile(suffix="_streamlit") as f: 
-        f.write(uploadedFile.getbuffer())
-        reader = pv.STLReader(f.name)
-    
-        ## Read data and send to plotter
-        mesh = reader.read()
-        plotter.add_mesh(mesh,color=color_stl)
-
-        ## Export to a pythreejs HTML
-        model_html = io.StringIO()
-        plotter.export_html(model_html, backend='pythreejs')
-        
-        ## Show in webpage
-        st.components.v1.html(model_html.getvalue(),height=400)
+# source_code = open(htmlFile, 'r', encoding='utf-8')
+source_code = htmlFile.getvalue().decode('utf-8')
+# source_code = htmlFile.read()
+# source_code = open(htmlFile)
+# st.write(source_code)
+components.html(source_code, height=1000)
+# components.iframe('file:///Z:/CAD/Autodesk/RVT/Dynamo/Dynamo%202_X/github/pyvista_streamlit/pyvista%20(5)/pyvista%20(5).html', height=1000)
