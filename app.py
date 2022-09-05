@@ -94,8 +94,8 @@ pl.camera_position = cpos
 # plotter.show()
 
 pv.start_xvfb()
-if os.path.exists('vtkjs.html'):
-    os.remove('vtkjs.html')
+# if os.path.exists('vtkjs.html'):
+#     os.remove('vtkjs.html')
 pl.export_html('vtkjs.html', backend='panel')
 htmlFile = open('vtkjs.html', 'r', encoding='utf-8')
     
