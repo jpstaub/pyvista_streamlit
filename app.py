@@ -108,3 +108,5 @@ htmlFile = open('vtkjs.html', 'r', encoding='utf-8')
 # display: show html file
 source_code = htmlFile.read()
 components.html(source_code, width=800, height=400)
+
+st.download_button("Download HTML", source_code, file_name="vtkjs.html", mime='text/plain')
