@@ -17,3 +17,4 @@ _ = pl.add_mesh(mesh, scalars='Spatial Cell Data', show_edges=True)
 pl.export_html('pyvista_panel.html', backend='panel')  
 
 # pl.show()
+

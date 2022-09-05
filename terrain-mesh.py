@@ -1,45 +1,33 @@
-# -*- coding: utf-8 -*-
 """
-Created on Fri Sep  2 20:16:24 2022
+.. _terrain_following_mesh_example:
 
-@author: admin
+Terrain Following Mesh
+~~~~~~~~~~~~~~~~~~~~~~
 
-https://discuss.streamlit.io/t/include-an-existing-html-file-in-streamlit-app/5655/3
+Use a topographic surface to create a 3D terrain-following mesh.
+
+Terrain following meshes are common in the environmental sciences, for instance
+in hydrological modelling (see
+`Maxwell 2013 <https://www.sciencedirect.com/science/article/abs/pii/S0309170812002564>`_
+and
+`ParFlow <https://parflow.org>`_).
+
+In this example, we demonstrate a simple way to make a 3D grid/mesh that
+follows a given topographic surface. In this example, it is important to note
+that the given digital elevation model (DEM) is structured (gridded and not
+triangulated): this is common for DEMs.
 """
-
-import streamlit as st
-import streamlit.components.v1 as components
-
-# generate: python modules to generate html file for display
-import pyvista as pv
-from pyvista import examples
 
 import numpy as np
 
-# import os
+# sphinx_gallery_thumbnail_number = 3
+import pyvista as pv
+from pyvista import examples
 
-st.header("test large visualization")
-
-# def uploader_cb():
-#     print("Dummy callback for file uploader")
-
-# # define: file variables with streamlit
-# htmlFile = st.file_uploader("html file for display", type = 'html', on_change = uploader_cb())
-# if htmlFile is None:
-#     st.stop()
-
-# # small mesh example    
-# mesh = examples.load_uniform()
-# pl = pv.Plotter(shape=(1,2))
-# _ = pl.add_mesh(mesh, scalars='Spatial Point Data', show_edges=True)
-# pl.subplot(0,1)
-# _ = pl.add_mesh(mesh, scalars='Spatial Cell Data', show_edges=True)
-
-# # large mesh example https://docs.pyvista.org/examples/00-load/terrain-mesh.html?highlight=terrain
 ###############################################################################
 # Download a gridded topography surface (DEM)
 dem = examples.download_crater_topo()
-# dem
+dem
 
 ###############################################################################
 # Now let's subsample and extract an area of interest to make this example
@@ -54,7 +42,7 @@ subset = dem.extract_subset((500, 900, 400, 800, 0, 0), (5, 5, 1))
 # Now that we have a region of interest for our terrain following mesh, lets
 # make a 3D surface of that DEM:
 terrain = subset.warp_by_scalar()
-# terrain
+terrain
 
 ###############################################################################
 # terrain.plot()
@@ -88,23 +76,10 @@ cpos = [
 
 # mesh.plot(show_edges=True, lighting=False, cpos=cpos)
 
-pl = pv.Plotter()
-pl.add_mesh(mesh, show_edges=True, lighting=False)
-pl.camera_position = cpos
+plotter = pv.Plotter()
+plotter.add_mesh(mesh, show_edges=True, lighting=False)
+plotter.camera_position = cpos
 # plotter.show()
 
-# pv.start_xvfb()
-# if os.path.exists('vtkjs.html'):
-#     os.remove('vtkjs.html')
-pl.export_html('vtkjs.html', backend='panel')
-htmlFile = open('vtkjs.html', 'r', encoding='utf-8')
-    
-# # display: show html file
-# source_code = htmlFile.getvalue().decode('utf-8')
-# components.html(source_code, height=1000)
+plotter.export_html('terrain-mesh.html', backend='panel')
 
-# st.text(htmlFile.getvalue().decode('utf-8'))
-
-# display: show html file
-source_code = htmlFile.read()
-components.html(source_code, width=800, height=400)
