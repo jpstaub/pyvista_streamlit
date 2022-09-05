@@ -1,10 +1,5 @@
-nodejs
-npm
-libgl1-mesa-glx
+libg11
+libxrender1
+libgll-mesa-glx
 xvfb
-libxrender-dev
-libjs-three
-node-three-orbit-controls
-node-three-stl-loader
-libvtk6-dev
-libvtk7-dev
+
