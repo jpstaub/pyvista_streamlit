@@ -1,5 +1,3 @@
-libg11
 libxrender1
-libgll-mesa-glx
 xvfb
 
